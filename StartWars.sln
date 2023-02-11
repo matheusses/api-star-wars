@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D539C601-CB7C-4258-A763-7A0DC7DEAAB7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matheusses.StarWars.Domain", "src\Matheusses.StarWars.Domain\Matheusses.StarWars.Domain.csproj", "{875CBFFC-3F4C-4486-B43F-3D6697A43762}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matheusses.StarWars.WebApi", "src\Matheusses.StarWars.WebApi\Matheusses.StarWars.WebApi.csproj", "{FDFDEBB5-5F0A-4E4D-8F6E-A222C7D29CBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matheusses.StarWars.Infrastructure", "src\Matheusses.StarWars.Infrastructure\Matheusses.StarWars.Infrastructure.csproj", "{2AE912F8-8D9E-4986-B091-38BBB9CB03C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matheusses.StarWars.UnitTest", "src\Matheusses.StarWars.UnitTest\Matheusses.StarWars.UnitTest.csproj", "{F7F786A2-60A8-4C40-9983-5BEE9C9EB2E8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{875CBFFC-3F4C-4486-B43F-3D6697A43762}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{875CBFFC-3F4C-4486-B43F-3D6697A43762}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{875CBFFC-3F4C-4486-B43F-3D6697A43762}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{875CBFFC-3F4C-4486-B43F-3D6697A43762}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDFDEBB5-5F0A-4E4D-8F6E-A222C7D29CBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDFDEBB5-5F0A-4E4D-8F6E-A222C7D29CBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDFDEBB5-5F0A-4E4D-8F6E-A222C7D29CBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDFDEBB5-5F0A-4E4D-8F6E-A222C7D29CBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AE912F8-8D9E-4986-B091-38BBB9CB03C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AE912F8-8D9E-4986-B091-38BBB9CB03C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AE912F8-8D9E-4986-B091-38BBB9CB03C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AE912F8-8D9E-4986-B091-38BBB9CB03C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7F786A2-60A8-4C40-9983-5BEE9C9EB2E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7F786A2-60A8-4C40-9983-5BEE9C9EB2E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7F786A2-60A8-4C40-9983-5BEE9C9EB2E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7F786A2-60A8-4C40-9983-5BEE9C9EB2E8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{875CBFFC-3F4C-4486-B43F-3D6697A43762} = {D539C601-CB7C-4258-A763-7A0DC7DEAAB7}
+		{FDFDEBB5-5F0A-4E4D-8F6E-A222C7D29CBD} = {D539C601-CB7C-4258-A763-7A0DC7DEAAB7}
+		{2AE912F8-8D9E-4986-B091-38BBB9CB03C3} = {D539C601-CB7C-4258-A763-7A0DC7DEAAB7}
+		{F7F786A2-60A8-4C40-9983-5BEE9C9EB2E8} = {D539C601-CB7C-4258-A763-7A0DC7DEAAB7}
+	EndGlobalSection
+EndGlobal

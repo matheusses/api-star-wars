@@ -1,0 +1,30 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+
+version: '3.4'
+
+services:
+  api:
+    image: star-wars-webapi
+    container_name: api
+    build:
+      context: .
+      dockerfile: src/Matheusses.StarWars.WebApi/Dockerfile
+    ports:
+      - 5000:5000
+    depends_on:
+      - mongo
+    environment: 
+      - MongoDB__Host= mongo
+
+  mongo:
+      image: mongo
+      container_name: mongo
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: root
+        MONGO_INITDB_ROOT_PASSWORD: root
+      ports:
+        - 27017:27017
+
+volumes:
+  db-volume:
+

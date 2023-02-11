@@ -11,5 +11,6 @@ namespace Matheusses.StarWars.Domain.Model
         public String Name { get; init; }
         public String Climate { get; init; }
         public String Terrain { get; init; }
+        public List<Film> Films {get; init;}
     }
 }

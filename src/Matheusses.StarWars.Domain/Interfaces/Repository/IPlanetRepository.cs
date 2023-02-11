@@ -9,5 +9,7 @@ namespace Matheusses.StarWars.Domain.Interfaces.Repository
     public interface IPlanetRepository : IRepository<Planet>
     {
         Task<Planet> GetByNameAsync(string name);
+        Task<Planet> GetByIdAsync(int id);
+        Task<bool> DeletarAsync(int id);
     }
 }

@@ -8,8 +8,6 @@ using MongoDB.Driver;
 
 namespace Matheusses.StarWars.Infrastructure.DataAccess.NoSql.MongoDb.Repository
 {
-    
-
     public class FilmRepository : IFilmRepository
     {
         private readonly IStarWarsContext _context;
@@ -23,24 +21,9 @@ namespace Matheusses.StarWars.Infrastructure.DataAccess.NoSql.MongoDb.Repository
            await _context.Films.InsertOneAsync(entity);
         }
 
-        public async Task<bool> DeletarAsync(Film entity)
+        public Task AddManyAsync(List<Film> entities)
         {
-            FilterDefinition<Film> filter = Builders<Film>.Filter.Eq(p => p.Id, entity.Id);
-            DeleteResult deleteResult = await _context
-                                                .Films
-                                                .DeleteOneAsync(filter);
-            return deleteResult.IsAcknowledged
-                            && deleteResult.DeletedCount > 0;
-        }
-
-        public async Task<bool> DeleteByIdPlanetAsync(int idPlanet)
-        {
-            FilterDefinition<Film> filter = Builders<Film>.Filter.Eq(p => p.PlanetId, idPlanet);
-            DeleteResult deleteResult = await _context
-                                                .Films
-                                                .DeleteManyAsync(filter);
-            return deleteResult.IsAcknowledged
-                            && deleteResult.DeletedCount > 0;
+            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<Film>> GetAllAsync()
@@ -51,20 +34,5 @@ namespace Matheusses.StarWars.Infrastructure.DataAccess.NoSql.MongoDb.Repository
                         .ToListAsync();
         }
 
-        public async Task<IEnumerable<Film>> GetAllByIdPlanetAsync(int idPlanet)
-        {
-             return await _context
-                        .Films
-                        .Find(p => p.PlanetId == idPlanet)
-                        .ToListAsync();
-        }
-
-        public async Task<Film> GetByIdAsync(int id)
-        {
-            return await _context
-                  .Films
-                  .Find(p => p.Id == id)
-                  .FirstOrDefaultAsync();
-        }
     }
 }

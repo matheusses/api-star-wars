@@ -14,12 +14,14 @@ namespace Matheusses.StarWars.Infrastructure.DataAccess.NoSql.MongoDb.Mapping
             BsonClassMap.RegisterClassMap<Planet>(map =>
             {
                 map.AutoMap(); 
-                 map.SetIgnoreExtraElements(true);              
+                map.SetIgnoreExtraElements(true);  
+                map.MapIdField(p => p.Id);            
                 map.MapCreator(p => new Planet(){
                     Climate = p.Climate,
                     Id = p.Id,
                     Terrain = p.Terrain,
-                    Name = p.Name
+                    Name = p.Name,
+                    Films = p.Films,
                 });
             });
         }

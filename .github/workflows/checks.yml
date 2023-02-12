@@ -3,10 +3,9 @@ name: checks
 on: [push]
 
 env:
-  PATH_PROJECT: ./src/Matheusses.StarWars.Domain/Matheusses.StarWars.Domain.csproj
   PATH_TESTS_PROJECT: ./src/Matheusses.StarWars.UnitTest/Matheusses.StarWars.UnitTest.csproj
   NUGET_SERVER: https://api.nuget.org/v3/index.json
-  TEST_RESULTS_DIRECTORY: ./TestResults
+  TEST_DIRECTORY: ./src/Matheusses.StarWars.UnitTest
   TEST_RESULTS_FILE: ./TestResults/report-test.xml
 
 jobs:
@@ -28,17 +27,35 @@ jobs:
     - name: Display default version after installing .NET 7
       run: dotnet --version
     - name: Test Execution (Generate XML in the JUnit pattern)
-      run: dotnet test ${{ env.PATH_TESTS_PROJECT }} --results-directory ${{ env.TEST_RESULTS_DIRECTORY }} --logger:"junit;LogFileName=report-test.xml"
-    - name: Display test execution results with xUnit already converted to JUnit
+      run: dotnet test ${{ env.PATH_TESTS_PROJECT }} --verbosity minimal --logger:"html;LogFileName=report-test.html" --collect:"XPlat Code Coverage"
       if: always()
+    - name: Install ReportGenerator
+      if: success()
+      run: dotnet tool install --global dotnet-reportgenerator-globaltool --version 4.8.4
+    - name: Generate report cover tests with ReportGenerator
+      if: success()
       run: |
-        ls
-        echo "Directory context ${{ env.TEST_RESULTS_DIRECTORY }}"
-        cd ${{ env.TEST_RESULTS_DIRECTORY }}
-        ls
-        cat report-test.xml
-    - name: Create Test Summary
-      uses: test-summary/action@v1
+        cd ${{ env.TEST_DIRECTORY }}/TestResults
+        # Access directory generate with the cover code XML
+        cd $(ls -d */|head -n 1)
+        reportgenerator "-reports:coverage.cobertura.xml" "-targetdir:coveragereport" -reporttypes:Html
+    - name: Upload report cover code success as an artifact
+      uses: actions/upload-artifact@v2.2.2
+      env:
+        PATH_RESULT_TEST: ${{ env.TEST_DIRECTORY }}/TestResults/
+      if: success()
       with:
-        paths: ${{ env.TEST_RESULTS_FILE }}
-      if: always()
+        name: result-test
+        path: ${{ env.PATH_RESULT_TEST }}
+        retention-days: 30
+    - name: Upload report cover code with fails as an artifact
+      uses: actions/upload-artifact@v2.2.2
+      if: failure()
+      env:
+        PATH_FAIL_REPORT: ${{ env.TEST_DIRECTORY }}/TestResults/report-test.html
+      with:
+        name: fail-test-result
+        path: ${{ env.PATH_FAIL_REPORT }}
+        retention-days: 30        
+  
+

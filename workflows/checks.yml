@@ -1,0 +1,44 @@
+name: Checks
+
+on: [push]
+
+env:
+  PATH_PROJECT: ./src/Matheusses.StarWars.Domain/Matheusses.StarWars.Domain.csproj
+  PATH_TESTS_PROJECT: ./src/Matheusses.StarWars.UnitTest/Matheusses.StarWars.UnitTest.csproj
+  NUGET_SERVER: https://api.nuget.org/v3/index.json
+  TEST_RESULTS_DIRECTORY: ./TestResults
+  TEST_RESULTS_FILE: ./TestResults/report-test.xml
+
+jobs:
+  tests:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Show pre-existing .NET installations
+      run: |
+        dotnet --list-sdks
+        echo '**** Default version for .NET ****'
+        dotnet --version
+    - name: Setup .NET 7
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 7.0.102
+    - name: Display default version after installing .NET 7
+      run: dotnet --version
+    - name: Test Execution (Generate XML in the JUnit pattern)
+      run: dotnet test ${{ env.PATH_TESTS_PROJECT }} --results-directory ${{ env.TEST_RESULTS_DIRECTORY }} --logger:"junit;LogFileName=report-test.xml"
+    - name: Display test execution results with xUnit already converted to JUnit
+      if: always()
+      run: |
+        ls
+        echo "Directory context ${{ env.TEST_RESULTS_DIRECTORY }}"
+        cd ${{ env.TEST_RESULTS_DIRECTORY }}
+        ls
+        cat report-test.xml
+    - name: Create Test Summary
+      uses: test-summary/action@v1
+      with:
+        paths: ${{ env.TEST_RESULTS_FILE }}
+      if: always()

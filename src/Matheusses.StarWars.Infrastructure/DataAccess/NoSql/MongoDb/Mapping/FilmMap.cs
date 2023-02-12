@@ -18,9 +18,7 @@ namespace Matheusses.StarWars.Infrastructure.DataAccess.NoSql.MongoDb.Mapping
                 map.SetIgnoreExtraElements(true);
                 map.MapCreator(p => new Film(){
                     Director = p.Director,
-                    Id = p.Id,
                     ReleaseDate = p.ReleaseDate,
-                    PlanetId = p.PlanetId,
                     Title = p.Title,
                 });                             
             });

@@ -23,9 +23,9 @@ namespace Matheusses.StarWars.Infrastructure.DataAccess.NoSql.MongoDb.Repository
            await _context.Planets.InsertOneAsync(entity);
         }
 
-        public async Task<bool> DeletarAsync(Planet entity)
+        public async Task<bool> DeleteAsync(int id)
         {
-            FilterDefinition<Planet> filter = Builders<Planet>.Filter.Eq(p => p.Id, entity.Id);
+            FilterDefinition<Planet> filter = Builders<Planet>.Filter.Eq(p => p.Id, id);
             DeleteResult deleteResult = await _context
                                                 .Planets
                                                 .DeleteOneAsync(filter);

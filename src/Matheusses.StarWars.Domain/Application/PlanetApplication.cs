@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Matheusses.StarWars.Domain.DTO;
 using Matheusses.StarWars.Domain.Interfaces.Application;
@@ -32,39 +33,129 @@ namespace Matheusses.StarWars.Domain.Application
 
         }
 
-        public async Task<List<Planet>> GetAllPlanets()
+        public async Task<Result<List<Planet>>> GetAllPlanets()
         {
-            return (List<Planet>)await _planetRepository.GetAllAsync();
+            var result = ResultBuilder<List<Planet>>.Create();
+            var planets =  (List<Planet>)await _planetRepository.GetAllAsync();
+            return result.WithSuccess(planets);
         }
 
-        public async Task<Planet> GetPlanetById(int id)
+        public async Task<Result<Planet>> GetPlanetById(int id)
         {
-            return await _planetRepository.GetByIdAsync(id);
-        }
+            var result = ResultBuilder<Planet>.Create();
+            try{
+                var planet =  await _planetRepository.GetByIdAsync(id);
+                if(planet == null)
+                    throw new InvalidOperationException("Planet not exist");
 
-        public async Task<Planet> GetPlanetByName(string name)
-        {
-            return await _planetRepository.GetByNameAsync(name);
-        }
-
-        public async Task<Planet> LoadPlanetByExternalApi(string id)
-        {
-            var planetDto = await _externalApiPlanet.GetAsync(id);
-            
-            foreach(var url in planetDto.Films)
+                return result.WithSuccess(planet);
+            }catch (Exception ex)
             {
-                var filmDto = await _externalApiFilm.GetByUrlAsync(url);
-                _films.Add(filmDto.ConverToFilm());
+                switch (ex){
+                    case InvalidOperationException:
+                        result.WithError(ex.Message,ex , HttpStatusCode.NotFound);
+                        break;
+                    default:
+                        result.WithException(errorMessage: ex.StackTrace ?? ex.Message);
+                        break;
+                }
+                return result;
             }
-            var planet = planetDto.ConvertToPlanet(int.Parse(id), _films);
-            await _planetRepository.AddAsync(planet);
-
-            return planet;
         }
 
-        public async Task<bool> RemovePlanet(int id)
+        public async Task<Result<Planet>> GetPlanetByName(string name)
         {
-          return await _planetRepository.DeleteAsync(id);
+            var result = ResultBuilder<Planet>.Create();
+            try{
+                var planet =  await _planetRepository.GetByNameAsync(name);
+                if(planet == null)
+                    throw new InvalidOperationException("Planet not exist");
+                    
+                return result.WithSuccess(planet);
+            }catch (Exception ex)
+            {
+                switch (ex){
+                    case InvalidOperationException:
+                        result.WithError(ex.Message,ex , HttpStatusCode.NotFound);
+                        break;
+                    default:
+                        result.WithException(errorMessage: ex.StackTrace ?? ex.Message);
+                        break;
+                }
+                return result;
+            }
+        }
+
+        public async Task<Result<Planet>> LoadPlanetByExternalApi(string id)
+        {
+            var result = ResultBuilder<Planet>.Create();
+            try{
+                int planetId = 0;
+                if(!int.TryParse(id, out planetId))
+                    throw new ArgumentException("Invalid input");
+                
+                Planet planet =  await _planetRepository.GetByIdAsync(planetId);
+                if (planet != null)
+                    return result.WithSuccess(planet);
+
+
+                var planetDto = await _externalApiPlanet.GetAsync(id);
+
+                if (planetDto is null)
+                    throw new InvalidOperationException("Planet not found or External Api unavalaible");
+                
+                foreach(var url in planetDto.Films)
+                {
+                    var filmDto = await _externalApiFilm.GetByUrlAsync(url);
+                    if (filmDto is null)
+                       throw new InvalidOperationException("Planet not found or External Api unavalaible");
+                    _films.Add(filmDto.ConverToFilm());
+                }
+
+                planet = planetDto.ConvertToPlanet(planetId, _films);
+                await _planetRepository.AddAsync(planet);
+            
+                return result.WithSuccess(planet);
+
+            }catch (Exception ex)
+            {
+                switch (ex){
+                    case InvalidOperationException:
+                        result.WithError(ex.Message,ex , HttpStatusCode.BadRequest);
+                        break;
+                    case ArgumentException:
+                        result.WithError(ex.Message,ex);
+                        break;
+                    default:
+                        result.WithError(ex.Message ,ex , HttpStatusCode.NotFound);
+                        break;
+                }
+                return result;
+            }
+
+        }
+
+        public async Task<Result<bool>> RemovePlanet(int id)
+        {
+            var result = ResultBuilder<bool>.Create();
+            try{
+                bool deleted = await _planetRepository.DeleteAsync(id);
+                if(!deleted)
+                    throw new InvalidOperationException("Planet not exist");
+                return result.WithSuccess(deleted);
+            }catch (Exception ex)
+            {
+                switch (ex){
+                    case InvalidOperationException:
+                        result.WithError(ex.Message,ex , HttpStatusCode.NotFound);
+                        break;
+                    default:
+                        result.WithException(errorMessage: ex.StackTrace ?? ex.Message);
+                        break;
+                }
+                return result;
+            }
+            
         }
     }
 }

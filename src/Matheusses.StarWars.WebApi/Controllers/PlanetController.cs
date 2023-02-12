@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Matheusses.StarWars.Domain.Interfaces.Application;
 using Microsoft.AspNetCore.Mvc;
+using Matheusses.StarWars.WebApi.Filters;
 
 namespace Matheusses.StarWars.WebApi.Controllers
 {
@@ -20,6 +21,7 @@ namespace Matheusses.StarWars.WebApi.Controllers
         }
 
         [HttpGet("loadexternal/{id}")]
+        [HttpResultActionFilter]
         public async Task<IActionResult> GetExternalPlanet([FromRoute] string id)
         {
             var retorno = await _planetApplication.LoadPlanetByExternalApi(id);
@@ -27,6 +29,7 @@ namespace Matheusses.StarWars.WebApi.Controllers
         }
 
         [HttpGet("")]
+        [HttpResultActionFilter]
         public async Task<IActionResult> Get()
         {
             var retorno = await _planetApplication.GetAllPlanets();
@@ -34,6 +37,7 @@ namespace Matheusses.StarWars.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [HttpResultActionFilter]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
             var retorno = await _planetApplication.GetPlanetById(id);
@@ -41,6 +45,7 @@ namespace Matheusses.StarWars.WebApi.Controllers
         }
 
         [HttpGet("name/{name}")]
+        [HttpResultActionFilter]
         public async Task<IActionResult> Get([FromRoute] string name)
         {
             var retorno = await _planetApplication.GetPlanetByName(name);
@@ -48,6 +53,7 @@ namespace Matheusses.StarWars.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [HttpResultActionFilter]
         public async Task<IActionResult> RemoverProduto([FromRoute] int id)
         {
             var retorno = await _planetApplication.RemovePlanet(id);

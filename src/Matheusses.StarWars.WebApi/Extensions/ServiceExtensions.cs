@@ -21,7 +21,6 @@ namespace Matheusses.StarWars.WebApi.Extensions
         private static void AddRepository(this IServiceCollection services)
         {
             services.AddScoped<IPlanetRepository, PlanetRepository>();
-            services.AddScoped<IFilmRepository, FilmRepository>();
         }
         private static void AddApplication(this IServiceCollection services)
         {

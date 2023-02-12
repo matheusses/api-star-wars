@@ -14,19 +14,16 @@ namespace Matheusses.StarWars.Domain.Application
     public sealed class PlanetApplication : IPlanetApplication
     {
         private readonly IPlanetRepository _planetRepository;
-        private readonly IFilmRepository _filmRepository;
         private readonly IExternalApiRest<PlanetDto> _externalApiPlanet;
         private readonly IExternalApiRest<FilmDto> _externalApiFilm;
         private List<Film> _films;
         public PlanetApplication(
             IPlanetRepository planetRepository,
-            IFilmRepository filmRepository,
             IExternalApiRest<PlanetDto> externalApiPlanet,
             IExternalApiRest<FilmDto> externalApiFilm
         )
         {
             _planetRepository = planetRepository;
-            _filmRepository = filmRepository;
             _externalApiPlanet = externalApiPlanet;
             _externalApiFilm = externalApiFilm;
             _films = new List<Film>(4);

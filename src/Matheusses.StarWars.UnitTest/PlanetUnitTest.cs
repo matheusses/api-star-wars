@@ -21,7 +21,6 @@ public partial class PlanetApplicationUnitTest
     private readonly PlanetApplication _planetApllication;
 
     private readonly IPlanetRepository _planetRepository =  Substitute.For<IPlanetRepository>();
-    private readonly IFilmRepository _filmRepository =  Substitute.For<IFilmRepository>();
     private readonly IExternalApiRest<PlanetDto> _externalApiPlanet = Substitute.For<IExternalApiRest<PlanetDto>>();
     private readonly IExternalApiRest<FilmDto> _externalApiFilm = Substitute.For<IExternalApiRest<FilmDto>>();
 
@@ -29,7 +28,6 @@ public partial class PlanetApplicationUnitTest
     {
         _planetApllication = new PlanetApplication(
             _planetRepository,
-            _filmRepository,
             _externalApiPlanet,
             _externalApiFilm
         );

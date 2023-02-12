@@ -8,7 +8,7 @@ namespace Matheusses.StarWars.Domain.DTO
 {
     public class PlanetDto
     {
-        public int? Id {get; init;}
+        public int Id {get; init;}
         public String Name { get; init; }
         public String Climate { get; init; }
         public String Terrain { get; init; }

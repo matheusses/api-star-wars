@@ -36,8 +36,20 @@ namespace Matheusses.StarWars.Domain.Application
         public async Task<Result<List<Planet>>> GetAllPlanets()
         {
             var result = ResultBuilder<List<Planet>>.Create();
-            var planets =  (List<Planet>)await _planetRepository.GetAllAsync();
-            return result.WithSuccess(planets);
+            try {
+                var planets =  (List<Planet>)await _planetRepository.GetAllAsync();
+                return result.WithSuccess(planets);
+            }catch (Exception ex){
+                switch (ex){
+                    case InvalidOperationException:
+                        result.WithError(ex.Message,ex , HttpStatusCode.NotFound);
+                        break;
+                    default:
+                        result.WithException(errorMessage: ex.StackTrace ?? ex.Message);
+                        break;
+                }
+                return result;
+            }
         }
 
         public async Task<Result<Planet>> GetPlanetById(int id)
@@ -121,13 +133,13 @@ namespace Matheusses.StarWars.Domain.Application
             {
                 switch (ex){
                     case InvalidOperationException:
-                        result.WithError(ex.Message,ex , HttpStatusCode.BadRequest);
+                        result.WithError(ex.Message,ex , HttpStatusCode.NotFound);
                         break;
                     case ArgumentException:
                         result.WithError(ex.Message,ex);
                         break;
                     default:
-                        result.WithError(ex.Message ,ex , HttpStatusCode.NotFound);
+                        result.WithException(errorMessage: ex.StackTrace ?? ex.Message);
                         break;
                 }
                 return result;

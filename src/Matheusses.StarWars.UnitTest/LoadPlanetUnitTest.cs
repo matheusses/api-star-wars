@@ -11,29 +11,13 @@ using Serilog;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using Matheusses.StarWars.Domain.Model;
+using System.Net;
 
 namespace Matheusses.StarWars.UnitTest;
 
 [Trait("Planet", "PlanetApplication")]
-public class PlanetApplicationUnitTest
+public partial class PlanetApplicationUnitTest
 {
-    private readonly PlanetApplication _planetApllication;
-
-    private readonly IPlanetRepository _planetRepository =  Substitute.For<IPlanetRepository>();
-    private readonly IFilmRepository _filmRepository =  Substitute.For<IFilmRepository>();
-    private readonly IExternalApiRest<PlanetDto> _externalApiPlanet = Substitute.For<IExternalApiRest<PlanetDto>>();
-    private readonly IExternalApiRest<FilmDto> _externalApiFilm = Substitute.For<IExternalApiRest<FilmDto>>();
-
-    public PlanetApplicationUnitTest()
-    {
-        _planetApllication = new PlanetApplication(
-            _planetRepository,
-            _filmRepository,
-            _externalApiPlanet,
-            _externalApiFilm
-        );
-        
-    }
 
     [Fact(DisplayName = "Test load planet from self database")]
     [Trait("Planet", "LoadPlanetFromSelfDatabaseTest Success")]
@@ -47,6 +31,7 @@ public class PlanetApplicationUnitTest
         // assert
         await _planetRepository.Received(1).GetByIdAsync(planetFake.Id);            
         Assert.True(result.HasSuccess);
+        Assert.Equal(result.HttpStatusCode, HttpStatusCode.OK);
     }
 
     [Fact(DisplayName = "Test load planet from external api")]
@@ -54,13 +39,10 @@ public class PlanetApplicationUnitTest
     public async void LoadPlanetFromExternalApiTest()
     {
         // arrange
-        var planetDtoFake = PlanetFaker.GenerateDto();
-        
+        var planetDtoFake = PlanetFaker.GenerateDto();        
         var urlFilm = planetDtoFake.Films.First();
         var filmDtoFake = FilmFaker.GenerateDto();
         List<Film> filmsFake = new List<Film>{ filmDtoFake.ConverToFilm()};
-        
-
         var planetFake = planetDtoFake.ConvertToPlanet(planetDtoFake.Id, filmsFake);
 
         _planetRepository.GetByIdAsync(planetDtoFake.Id).ReturnsNull();
@@ -77,6 +59,7 @@ public class PlanetApplicationUnitTest
         await _planetRepository.Received(1).AddAsync(Arg.Any<Planet>()); 
         Assert.True(result.HasSuccess);
         Assert.NotNull(result.Data);
+        Assert.Equal(result.HttpStatusCode, HttpStatusCode.OK);
     }
 
     [Fact(DisplayName = "Test load planet with invalid input")]
@@ -90,5 +73,45 @@ public class PlanetApplicationUnitTest
         // assert
         Assert.False(result.HasSuccess);
         Assert.Null(result.Data);
+        Assert.Equal(result.HttpStatusCode, HttpStatusCode.BadRequest);
+        Assert.Equal("Invalid input", result.Message);
+    }
+
+    [Fact(DisplayName = "Test load planet not found from external planet api")]
+    [Trait("Planet", "LoadPlanetFromExternalApi not found from external planet api")]
+    public async void LoadPlanetNotFoundFromExternalPlanetApiTest()
+    {
+        // arrange
+        int notFoundInput = 1;
+        _planetRepository.GetByIdAsync(notFoundInput).ReturnsNull();
+        _externalApiPlanet.GetAsync(notFoundInput.ToString()).ReturnsNull();
+        // action
+        var result = await _planetApllication.LoadPlanetByExternalApi(notFoundInput.ToString());
+        // assert
+        Assert.False(result.HasSuccess);
+        Assert.Null(result.Data);
+        Assert.Equal(result.HttpStatusCode, HttpStatusCode.NotFound);
+        Assert.Equal("Planet not found or External Api unavalaible", result.Message);
+    }
+
+    [Fact(DisplayName = "Test not found from external film api to load planet ")]
+    [Trait("Planet", "LoadPlanetFromExternalApi not found from external film api")]
+    public async void LoadPlanetNotFoundFromExternalFilmApiTest()
+    {
+        // arrange
+        var planetDtoFake = PlanetFaker.GenerateDto();        
+        var urlFilm = planetDtoFake.Films.First();
+
+        _planetRepository.GetByIdAsync(planetDtoFake.Id).ReturnsNull();
+        _externalApiPlanet.GetAsync(planetDtoFake.Id.ToString()).Returns(Task.FromResult(planetDtoFake));
+        _externalApiFilm.GetByUrlAsync(urlFilm).ReturnsNull();
+
+        // action
+        var result = await _planetApllication.LoadPlanetByExternalApi(planetDtoFake.Id.ToString());
+        // assert
+        Assert.False(result.HasSuccess);
+        Assert.Null(result.Data);
+        Assert.Equal(result.HttpStatusCode, HttpStatusCode.NotFound);
+        Assert.Equal("Planet not found or External Api unavalaible", result.Message);
     }
 }

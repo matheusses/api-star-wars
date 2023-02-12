@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matheusses.StarWars.WebApi"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matheusses.StarWars.Infrastructure", "src\Matheusses.StarWars.Infrastructure\Matheusses.StarWars.Infrastructure.csproj", "{2AE912F8-8D9E-4986-B091-38BBB9CB03C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matheusses.StarWars.UnitTest", "src\Matheusses.StarWars.UnitTest\Matheusses.StarWars.UnitTest.csproj", "{F7F786A2-60A8-4C40-9983-5BEE9C9EB2E8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matheusses.StarWars.UnitTest", "src\Matheusses.StarWars.UnitTest\Matheusses.StarWars.UnitTest.csproj", "{FDBEB73A-FDAE-40ED-BAAA-DDD3AD75D0C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,15 +34,15 @@ Global
 		{2AE912F8-8D9E-4986-B091-38BBB9CB03C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AE912F8-8D9E-4986-B091-38BBB9CB03C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AE912F8-8D9E-4986-B091-38BBB9CB03C3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F7F786A2-60A8-4C40-9983-5BEE9C9EB2E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F7F786A2-60A8-4C40-9983-5BEE9C9EB2E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F7F786A2-60A8-4C40-9983-5BEE9C9EB2E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F7F786A2-60A8-4C40-9983-5BEE9C9EB2E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDBEB73A-FDAE-40ED-BAAA-DDD3AD75D0C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDBEB73A-FDAE-40ED-BAAA-DDD3AD75D0C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDBEB73A-FDAE-40ED-BAAA-DDD3AD75D0C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDBEB73A-FDAE-40ED-BAAA-DDD3AD75D0C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{875CBFFC-3F4C-4486-B43F-3D6697A43762} = {D539C601-CB7C-4258-A763-7A0DC7DEAAB7}
 		{FDFDEBB5-5F0A-4E4D-8F6E-A222C7D29CBD} = {D539C601-CB7C-4258-A763-7A0DC7DEAAB7}
 		{2AE912F8-8D9E-4986-B091-38BBB9CB03C3} = {D539C601-CB7C-4258-A763-7A0DC7DEAAB7}
-		{F7F786A2-60A8-4C40-9983-5BEE9C9EB2E8} = {D539C601-CB7C-4258-A763-7A0DC7DEAAB7}
+		{FDBEB73A-FDAE-40ED-BAAA-DDD3AD75D0C3} = {D539C601-CB7C-4258-A763-7A0DC7DEAAB7}
 	EndGlobalSection
 EndGlobal

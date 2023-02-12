@@ -10,6 +10,6 @@ namespace Matheusses.StarWars.Domain.Interfaces.Repository
     {
         Task<Planet> GetByNameAsync(string name);
         Task<Planet> GetByIdAsync(int id);
-        Task<bool> DeletarAsync(int id);
+        Task<bool> DeleteAsync(int id);
     }
 }

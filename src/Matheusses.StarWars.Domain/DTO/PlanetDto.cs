@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Matheusses.StarWars.Domain.Model;
 
 namespace Matheusses.StarWars.Domain.DTO
 {
@@ -13,6 +14,16 @@ namespace Matheusses.StarWars.Domain.DTO
         public String Terrain { get; init; }
         public DateTime? Created {get; init;}
         public List<string> Films { get; init; }
+
+        public Planet ConvertToPlanet(int id, List<Film> films){
+            return new Planet{
+                Climate = this.Climate,
+                Id = id,
+                Name = this.Name,
+                Terrain = this.Terrain,
+                Films = films,
+            };
+        }
         
     }
 }

@@ -51,7 +51,7 @@ Each planet in the database is characterized by its Name, Climate, and Terrain, 
 1. Open your web browser and navigate to http://localhost:5000/swagger/index.html. \
    The API has four endpoints:
 
-2. Load Planet by External API: \
+2. Load Planet by External API: 
    - Click on the "**Try it out**" button
    - Enter the **planet ID**
    - Click "**Execute**"
@@ -60,17 +60,17 @@ Each planet in the database is characterized by its Name, Climate, and Terrain, 
    - Click on the "**Try it out**" button
    - Click "**Execute**"
 
-4. Get Planet by ID:\
+4. Get Planet by ID:
    - Click on the "**Try it out**" button
    - Enter the **planet ID**
    - Click "**Execute**"
 
-5. Delete Planet:\
+5. Delete Planet:
    - Click on the "**Try it out**" button
    - Enter the **planet ID**
    - Click "**Execute**"
 
-6. Get Planet by Name: \
+6. Get Planet by Name: 
    - Click on the "**Try it out**" button
    - Enter the **planet name**
    - Click "**Execute**"

@@ -30,7 +30,7 @@ public partial class PlanetApplicationUnitTest
         var result = await _planetApllication.GetAllPlanets();
         // assert
         await _planetRepository.Received(1).GetAllAsync();            
-        Assert.True(result.HasSuccess);
+        Assert.True(result.Success);
          Assert.NotNull(result.Data);
         Assert.Equal(result.HttpStatusCode, HttpStatusCode.OK);
     }
@@ -45,7 +45,7 @@ public partial class PlanetApplicationUnitTest
         var result = await _planetApllication.GetAllPlanets();
         // assert
         await _planetRepository.Received(1).GetAllAsync();            
-        Assert.True(result.HasSuccess);
+        Assert.True(result.Success);
         Assert.NotNull(result.Data);
         Assert.Equal(result.HttpStatusCode, HttpStatusCode.OK);
     }
@@ -60,7 +60,7 @@ public partial class PlanetApplicationUnitTest
         var result = await _planetApllication.GetAllPlanets();
         // assert
         await _planetRepository.Received(1).GetAllAsync();            
-        Assert.True(result.HasSuccess);
+        Assert.True(result.Success);
         Assert.Null(result.Data);
         Assert.Equal(result.HttpStatusCode, HttpStatusCode.OK);
     }

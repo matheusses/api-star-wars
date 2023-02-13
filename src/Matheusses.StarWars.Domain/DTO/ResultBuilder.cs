@@ -9,12 +9,11 @@ namespace Matheusses.StarWars.Domain.DTO
 {
     public sealed partial class Result<T> 
     {
-        public bool HasSuccess { get; protected set; }
-        public bool HasError => !HasSuccess;
+        public bool Success { get; private set; }
         public List<string> Errors { get; private set;}
         public HttpStatusCode HttpStatusCode { get; private set; }
         public string Message { get; private set; }
-        internal Exception Exception { get; set; }
+        internal Exception Exception { get; private set; }
         public T Data{ get; private set; }
 
         internal Result()
@@ -34,7 +33,7 @@ namespace Matheusses.StarWars.Domain.DTO
             if (ex != null)
                 Log.Error(ex.ToString());
             HttpStatusCode = statusCode;
-            HasSuccess = false;
+            Success = false;
             if (errors != null)
                 Errors.AddRange(errors);
         }
@@ -42,7 +41,7 @@ namespace Matheusses.StarWars.Domain.DTO
         public Result<T> WithSuccess(T data)
         {
             Data = data;
-            HasSuccess = true;
+            Success = true;
             HttpStatusCode = HttpStatusCode.OK;
             return this;
         }
@@ -77,10 +76,7 @@ namespace Matheusses.StarWars.Domain.DTO
 
     }
 
-    public sealed partial class ResultBuilder<T>{
-        
-        private ResultBuilder(){}
-
+    public sealed partial class ResultFactory<T>{        
 	    public static Result<T> Create()  => new Result<T>();
     }
 }

@@ -29,7 +29,7 @@ public partial class PlanetApplicationUnitTest
         var result = await _planetApllication.RemovePlanet(input);
         // assert
         await _planetRepository.Received(1).DeleteAsync(input);            
-        Assert.True(result.HasSuccess);
+        Assert.True(result.Success);
         Assert.Equal(result.HttpStatusCode, HttpStatusCode.OK);
     }
 
@@ -44,22 +44,7 @@ public partial class PlanetApplicationUnitTest
         var result = await _planetApllication.RemovePlanet(input);
         // assert
         await _planetRepository.Received(1).DeleteAsync(input);            
-        Assert.False(result.HasSuccess);
+        Assert.False(result.Success);
         Assert.Equal(result.HttpStatusCode, HttpStatusCode.NotFound);
-    }
-
-    [Fact(DisplayName = "Test unexpected error to remove planet")]
-    [Trait("Planet", "RemovePlanet with unexpected error")]
-    public async void RemovePlanetUnexpectedErrorTest()
-    {
-        // arrange
-        int input = 1;
-        _planetRepository.DeleteAsync(input).ReturnsNull();
-        // action
-        var result = await _planetApllication.RemovePlanet(input);
-        // assert
-        await _planetRepository.Received(1).DeleteAsync(input);            
-        Assert.False(result.HasSuccess);
-        Assert.Equal(result.HttpStatusCode, HttpStatusCode.InternalServerError);
     }
 }

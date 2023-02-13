@@ -29,7 +29,7 @@ public partial class PlanetApplicationUnitTest
         var result = await _planetApllication.GetPlanetById(planetFake.Id);
         // assert
         await _planetRepository.Received(1).GetByIdAsync(planetFake.Id);            
-        Assert.True(result.HasSuccess);
+        Assert.True(result.Success);
         Assert.Equal(result.HttpStatusCode, HttpStatusCode.OK);
     }
 
@@ -44,7 +44,7 @@ public partial class PlanetApplicationUnitTest
         var result = await _planetApllication.GetPlanetById(planetFake.Id);
         // assert
         await _planetRepository.Received(1).GetByIdAsync(planetFake.Id);            
-        Assert.False(result.HasSuccess);
+        Assert.False(result.Success);
         Assert.Equal(result.HttpStatusCode, HttpStatusCode.NotFound);
     }
 }

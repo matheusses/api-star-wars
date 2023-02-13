@@ -30,7 +30,7 @@ public partial class PlanetApplicationUnitTest
         var result = await _planetApllication.LoadPlanetByExternalApi(planetFake.Id.ToString());
         // assert
         await _planetRepository.Received(1).GetByIdAsync(planetFake.Id);            
-        Assert.True(result.HasSuccess);
+        Assert.True(result.Success);
         Assert.Equal(result.HttpStatusCode, HttpStatusCode.OK);
     }
 
@@ -57,7 +57,7 @@ public partial class PlanetApplicationUnitTest
         await _externalApiPlanet.Received(1).GetAsync(planetDtoFake.Id.ToString());
         await _externalApiFilm.Received(1).GetByUrlAsync(urlFilm); 
         await _planetRepository.Received(1).AddAsync(Arg.Any<Planet>()); 
-        Assert.True(result.HasSuccess);
+        Assert.True(result.Success);
         Assert.NotNull(result.Data);
         Assert.Equal(result.HttpStatusCode, HttpStatusCode.OK);
     }
@@ -71,7 +71,7 @@ public partial class PlanetApplicationUnitTest
         // action
         var result = await _planetApllication.LoadPlanetByExternalApi(invalidInput);
         // assert
-        Assert.False(result.HasSuccess);
+        Assert.False(result.Success);
         Assert.Null(result.Data);
         Assert.Equal(result.HttpStatusCode, HttpStatusCode.BadRequest);
         Assert.Equal("Invalid input", result.Message);
@@ -88,10 +88,10 @@ public partial class PlanetApplicationUnitTest
         // action
         var result = await _planetApllication.LoadPlanetByExternalApi(notFoundInput.ToString());
         // assert
-        Assert.False(result.HasSuccess);
+        Assert.False(result.Success);
         Assert.Null(result.Data);
         Assert.Equal(result.HttpStatusCode, HttpStatusCode.NotFound);
-        Assert.Equal("Planet not found or External Api unavalaible", result.Message);
+        Assert.Equal("Planet not found or External Api unavailable", result.Message);
     }
 
     [Fact(DisplayName = "Test not found from external film api to load planet ")]
@@ -109,9 +109,9 @@ public partial class PlanetApplicationUnitTest
         // action
         var result = await _planetApllication.LoadPlanetByExternalApi(planetDtoFake.Id.ToString());
         // assert
-        Assert.False(result.HasSuccess);
+        Assert.False(result.Success);
         Assert.Null(result.Data);
         Assert.Equal(result.HttpStatusCode, HttpStatusCode.NotFound);
-        Assert.Equal("Planet not found or External Api unavalaible", result.Message);
+        Assert.Equal("Planet not found or External Api unavailable", result.Message);
     }
 }

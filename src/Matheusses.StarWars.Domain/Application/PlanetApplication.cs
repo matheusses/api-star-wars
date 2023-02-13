@@ -32,139 +32,97 @@ namespace Matheusses.StarWars.Domain.Application
 
         public async Task<Result<List<Planet>>> GetAllPlanets()
         {
-            var result = ResultBuilder<List<Planet>>.Create();
-            try {
-                var planets =  (List<Planet>)await _planetRepository.GetAllAsync();
-                return result.WithSuccess(planets);
-            }catch (Exception ex){
-                switch (ex){
-                    case InvalidOperationException:
-                        result.WithError(ex.Message,ex , HttpStatusCode.NotFound);
-                        break;
-                    default:
-                        result.WithException(errorMessage: ex.StackTrace ?? ex.Message);
-                        break;
-                }
-                return result;
-            }
+            var result = ResultFactory<List<Planet>>.Create();
+            var planets =  (List<Planet>)await _planetRepository.GetAllAsync();
+            return result.WithSuccess(planets);
         }
 
         public async Task<Result<Planet>> GetPlanetById(int id)
         {
-            var result = ResultBuilder<Planet>.Create();
-            try{
-                var planet =  await _planetRepository.GetByIdAsync(id);
-                if(planet == null)
-                    throw new InvalidOperationException("Planet not exist");
+            var result = ResultFactory<Planet>.Create();
+            var planet =  await _planetRepository.GetByIdAsync(id);
+            if(planet == null)
+                return result.WithError(
+                "Planet not exist", 
+                new InvalidOperationException(), 
+                HttpStatusCode.NotFound
+            );
 
-                return result.WithSuccess(planet);
-            }catch (Exception ex)
-            {
-                switch (ex){
-                    case InvalidOperationException:
-                        result.WithError(ex.Message,ex , HttpStatusCode.NotFound);
-                        break;
-                    default:
-                        result.WithException(errorMessage: ex.StackTrace ?? ex.Message);
-                        break;
-                }
-                return result;
-            }
+            return result.WithSuccess(planet);
         }
 
         public async Task<Result<Planet>> GetPlanetByName(string name)
         {
-            var result = ResultBuilder<Planet>.Create();
-            try{
-                var planet =  await _planetRepository.GetByNameAsync(name);
-                if(planet == null)
-                    throw new InvalidOperationException("Planet not exist");
-                    
-                return result.WithSuccess(planet);
-            }catch (Exception ex)
-            {
-                switch (ex){
-                    case InvalidOperationException:
-                        result.WithError(ex.Message,ex , HttpStatusCode.NotFound);
-                        break;
-                    default:
-                        result.WithException(errorMessage: ex.StackTrace ?? ex.Message);
-                        break;
-                }
-                return result;
-            }
+            var result = ResultFactory<Planet>.Create();
+            var planet =  await _planetRepository.GetByNameAsync(name);
+            if(planet == null)
+                  return result.WithError(
+                    "Planet not exist", 
+                    new InvalidOperationException(), 
+                    HttpStatusCode.NotFound
+                );
+                
+            return result.WithSuccess(planet);
         }
 
         public async Task<Result<Planet>> LoadPlanetByExternalApi(string id)
         {
-            var result = ResultBuilder<Planet>.Create();
-            try{
-                int planetId = 0;
-                if(!int.TryParse(id, out planetId))
-                    throw new ArgumentException("Invalid input");
-                
-                Planet planet =  await _planetRepository.GetByIdAsync(planetId);
-                if (planet != null)
-                    return result.WithSuccess(planet);
+            var result = ResultFactory<Planet>.Create();
+            int planetId = 0;
 
+            if (!int.TryParse(id, out planetId))
+                return result.WithError("Invalid input", new ArgumentException());
 
-                var planetDto = await _externalApiPlanet.GetAsync(id);
-
-                if (planetDto is null)
-                    throw new InvalidOperationException("Planet not found or External Api unavalaible");
-                
-                foreach(var url in planetDto.Films)
-                {
-                    var filmDto = await _externalApiFilm.GetByUrlAsync(url);
-                    if (filmDto is null)
-                       throw new InvalidOperationException("Planet not found or External Api unavalaible");
-                    _films.Add(filmDto.ConverToFilm());
-                }
-
-                planet = planetDto.ConvertToPlanet(planetId, _films);
-                await _planetRepository.AddAsync(planet);
-            
+            Planet planet = await _planetRepository.GetByIdAsync(planetId);
+            if (planet != null)
                 return result.WithSuccess(planet);
 
-            }catch (Exception ex)
-            {
-                switch (ex){
-                    case InvalidOperationException:
-                        result.WithError(ex.Message,ex , HttpStatusCode.NotFound);
-                        break;
-                    case ArgumentException:
-                        result.WithError(ex.Message,ex);
-                        break;
-                    default:
-                        result.WithException(errorMessage: ex.StackTrace ?? ex.Message);
-                        break;
-                }
-                return result;
-            }
+            var planetDto = await _externalApiPlanet.GetAsync(id);
+            if (planetDto is null)
+                return result.WithError(
+                    "Planet not found or External Api unavailable", 
+                    new InvalidOperationException(), 
+                    HttpStatusCode.NotFound
+                );
 
+            var films = await LoadFilms(planetDto.Films);
+            if (films == null)
+                return result.WithError(
+                    "Planet not found or External Api unavailable", 
+                    new InvalidOperationException(), 
+                    HttpStatusCode.NotFound
+                );
+
+            planet = planetDto.ConvertToPlanet(planetId, films);
+            await _planetRepository.AddAsync(planet);
+            return result.WithSuccess(planet);
+        }
+
+        private async Task<List<Film>> LoadFilms(List<string> filmUrls)
+        {
+            var films = new List<Film>();
+            foreach (var url in filmUrls)
+            {
+                var filmDto = await _externalApiFilm.GetByUrlAsync(url);
+                if (filmDto is null)
+                    return null;
+
+                films.Add(filmDto.ConverToFilm());
+            }
+            return films;
         }
 
         public async Task<Result<bool>> RemovePlanet(int id)
         {
-            var result = ResultBuilder<bool>.Create();
-            try{
-                bool deleted = await _planetRepository.DeleteAsync(id);
-                if(!deleted)
-                    throw new InvalidOperationException("Planet not exist");
-                return result.WithSuccess(deleted);
-            }catch (Exception ex)
-            {
-                switch (ex){
-                    case InvalidOperationException:
-                        result.WithError(ex.Message,ex , HttpStatusCode.NotFound);
-                        break;
-                    default:
-                        result.WithException(errorMessage: ex.StackTrace ?? ex.Message);
-                        break;
-                }
-                return result;
-            }
-            
+            var result = ResultFactory<bool>.Create();
+            bool deleted = await _planetRepository.DeleteAsync(id);
+            if(!deleted)
+                  return result.WithError(
+                    "Planet not exist", 
+                    new InvalidOperationException(), 
+                    HttpStatusCode.NotFound
+                );
+            return result.WithSuccess(deleted);
         }
     }
 }

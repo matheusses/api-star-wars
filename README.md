@@ -1,10 +1,8 @@
 # API Start Wars
  
-The API Star Wars gets information from the external [public API](https://swapi.dev) and load data and provide information. 
+The API Star Wars provides a comprehensive database of information from the Star Wars universe, including information about planets and the films in which they appear, some data are gotten from the external [public API](https://swapi.dev). The API is built using .Net 7 as the programming language, MongoDB as the NoSQL database management system, Swagger for API documentation, Serilog for log generation, and Polly for resilience and transient-fault-handling.
 
-This API is based on planet and the planet has the follow attibutes:
-- Name, Climate and Terrain
-- Each planet can have many films with name, director and release date.
+Each planet in the database is characterized by its Name, Climate, and Terrain, and can be associated with multiple films. The films are recorded with their Name, Director, and Release Date. Some informations is gotten from the external API To get started with the API, users need to have Docker and Docker Compose installed on their local machine. The installation process involves cloning the repository, changing into the project directory, and starting the Docker containers. Once the containers are running, the API can be accessed through a web browser at http://localhost:5000/swagger/index.html. Logs can be accessed at any time by executing a command in the Docker container.
 
 
 ## Built With

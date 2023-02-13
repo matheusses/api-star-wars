@@ -24,11 +24,10 @@ Each planet in the database is characterized by its Name, Climate, and Terrain, 
 - [Docker Compose](https://docs.docker.com/compose/)
 
 ### Installing
-
-1. Clone the repository to you local machine: 
+1. Clone the repository to you local machine:
 
    `git clone git@github.com:matheusses/api-star-wars.git`
-
+   
 2. Change into the project directory:
 
    `cd api-star-wars/src`
@@ -37,7 +36,7 @@ Each planet in the database is characterized by its Name, Climate, and Terrain, 
 
    `docker-compose up`
 
-4. Open your web browser and navigate to `http://localhost:5000/swagger/index.html` to access the application.
+4. Open your web browser and navigate to http://localhost:5000/swagger/index.html to access the application.
 
    That's it! You should now have the project running on your local machine.
 
@@ -49,40 +48,87 @@ Each planet in the database is characterized by its Name, Climate, and Terrain, 
 
 ### Usage
 
-1. Open your web browser and navigate to `http://localhost:5000/swagger/index.html` 
-   API has four endpoints:
+1. Open your web browser and navigate to http://localhost:5000/swagger/index.html. \
+   The API has four endpoints:
 
-![image](https://user-images.githubusercontent.com/1146846/218358600-d796f804-ed1c-418c-8256-161e5b6610a0.png)
+2. Load Planet by External API: \
+   - Click on the "**Try it out**" button
+   - Enter the **planet ID**
+   - Click "**Execute**"
+  
+3. Get All Planets:
+   - Click on the "**Try it out**" button
+   - Click "**Execute**"
 
-2. Load planet by external API
-![image](https://user-images.githubusercontent.com/1146846/218358986-3787c5ef-e2e0-46c9-95f5-366755838860.png)
-   - Click on the Try it out
-   - Inform the planet id
-   - Click Execute
+4. Get Planet by ID:\
+   - Click on the "**Try it out**" button
+   - Enter the **planet ID**
+   - Click "**Execute**"
 
-3. Get all planets
-![image](https://user-images.githubusercontent.com/1146846/218359905-f21ca329-dd2c-4b90-aaf4-85e5b0da397e.png)
-   - Click on the Try it out
-   - Click Execute
+5. Delete Planet:\
+   - Click on the "**Try it out**" button
+   - Enter the **planet ID**
+   - Click "**Execute**"
 
-4. Get planet by id
-![image](https://user-images.githubusercontent.com/1146846/218360078-ee3e1c26-f16d-44eb-949f-6679912d22cd.png)
-   - Click on the Try it out
-   - Inform the planet id
-   - Click Execute
+6. Get Planet by Name: \
+   - Click on the "**Try it out**" button
+   - Enter the **planet name**
+   - Click "**Execute**"
 
-5. Delete planet
-![image](https://user-images.githubusercontent.com/1146846/218360198-7e3def96-ddd3-4c13-95a8-a0cc7607108d.png)
-   - Click on the Try it out
-   - Inform the planet id
-   - Click Execute
+Response Format:
 
-6. Get planet by name
-![image](https://user-images.githubusercontent.com/1146846/218360282-802235e1-7183-455f-8c23-49a2ffe2e642.png)
-   - Click on the Try it out
-   - Inform the planet name
-   - Click Execute
+```
+  {
+    "success": bool,
+    "errors": [],
+    "httpStatusCode": status_code,
+    "message": string,
+    "data": {}
+  }
+```
 
+HTTP Status Codes:
+
+- **200** for successful requests.
+- **404** for not found results.
+- **400** for general validation errors.
+- **500** for unexpected errors.
+
+Return Examples:
+```
+{
+  "success": true,
+  "errors": [],
+  "httpStatusCode": 200,
+  "message": null,
+  "data": {
+    "id": 1,
+    "name": "Tatooine",
+    "climate": "arid",
+    "terrain": "desert",
+    "films": [
+      {
+        "title": "A New Hope",
+        "director": "George Lucas",
+        "releaseDate": "1977-05-25"
+      },
+      ...
+    ]
+  }
+}
+
+```
+
+```
+{
+  "success": false,
+  "errors": [],
+  "httpStatusCode": 404,
+  "message": "Planet not found",
+  "data": null
+}
+
+```
 
 ### Running the tests
 

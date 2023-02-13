@@ -27,7 +27,7 @@ namespace Matheusses.StarWars.WebApi.Filters
                         context.Result = new NotFoundObjectResult(responseValue.Value);
                         break;
                     default:
-                        context.Result = new ObjectResult(new { Error = responseValue.Value })
+                        context.Result = new ObjectResult(responseValue.Value)
                                             {
                                                 StatusCode = (int?)responseValue.Value.HttpStatusCode
                                             };

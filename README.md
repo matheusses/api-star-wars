@@ -86,32 +86,30 @@ Each planet in the database is characterized by its Name, Climate, and Terrain, 
 
 ### Running the tests
 
-The automated unit test is using GitHub Actions triggered by a push to the master branch.
+The API Star Wars project uses automated unit tests, which are triggered by a push to the `master` branch on GitHub. To access the test results, follow these steps:
 
-`git push origin` in the master branch triggered the github actions. It will generate report cover in the artifacts.
-
-1 . Access link in the github actions `https://github.com/matheusses/api-star-wars/actions`
+1 . Go to the GitHub Actions page for the API Star Wars project: *https://github.com/matheusses/api-star-wars/actions*
 
 ![image](https://user-images.githubusercontent.com/1146846/218357442-6595881d-bdb5-432a-8c59-424954d40c27.png)
 
 
-2 . Click in the workflow.
+2 . Find the workflow for the latest push to the `master` branch and click on it.
 
 ![image](https://user-images.githubusercontent.com/1146846/218357546-564bdee9-6c61-4d14-921b-c024164f4359.png)
 
 
-3. At final of the page has the Artifacts session, click on the result-test link to download report.
+3. Scroll to the bottom of the page to the "Artifacts" section. Click on the "result-test" link to download the report.
 
 ![image](https://user-images.githubusercontent.com/1146846/218356245-a648ab30-3568-4ecf-9c6b-2beaaade4556.png)
 
-4. Access the download path and extact the result-test.zip
+4. Extract the `result-test.zip` file in a desired location.
 
-5. Access cover report :
-   - Click on the result-test directory
-   - Click on the `uuid` name format directory
-   - Click on the coveragereport directory
-   - Click on the index.html
-6. It going to open the web page on the navigator and it is possivel interact with the web page
+5. To access the coverage repor :
+   - Go to the `result-test` directory
+   - Enter the directory with the `uuid` name format
+   - Go to the `coveragereport` directory
+   - Click on the `index.html` file
+6. The coverage report will open in a web browser, where you can interact with the results
 
 ![image](https://user-images.githubusercontent.com/1146846/218357272-90a153ac-ea17-419d-af07-0defd01fc44f.png)
     

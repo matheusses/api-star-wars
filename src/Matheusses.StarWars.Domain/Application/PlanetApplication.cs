@@ -44,7 +44,6 @@ namespace Matheusses.StarWars.Domain.Application
             if(planet == null)
                 return result.WithError(
                 "Planet not exist", 
-                new InvalidOperationException(), 
                 HttpStatusCode.NotFound
             );
 
@@ -58,7 +57,6 @@ namespace Matheusses.StarWars.Domain.Application
             if(planet == null)
                   return result.WithError(
                     "Planet not exist", 
-                    new InvalidOperationException(), 
                     HttpStatusCode.NotFound
                 );
                 
@@ -68,34 +66,38 @@ namespace Matheusses.StarWars.Domain.Application
         public async Task<Result<Planet>> LoadPlanetByExternalApi(string id)
         {
             var result = ResultFactory<Planet>.Create();
-            int planetId = 0;
+            try{
 
-            if (!int.TryParse(id, out planetId))
-                return result.WithError("Invalid input", new ArgumentException());
+                int planetId = 0;
 
-            Planet planet = await _planetRepository.GetByIdAsync(planetId);
-            if (planet != null)
+                if (!int.TryParse(id, out planetId))
+                    return result.WithError("Invalid input");
+
+                Planet planet = await _planetRepository.GetByIdAsync(planetId);
+                if (planet != null)
+                    return result.WithSuccess(planet);
+
+                var planetDto = await _externalApiPlanet.GetAsync(id);
+                if (planetDto is null)
+                    return result.WithError(
+                        "Planet not found or External Api unavailable", 
+                        HttpStatusCode.NotFound
+                    );
+
+                var films = await LoadFilms(planetDto.Films);
+                if (films == null)
+                    return result.WithError(
+                        "Planet not found or External Api unavailable", 
+                        HttpStatusCode.NotFound
+                    );
+
+                planet = planetDto.ConvertToPlanet(planetId, films);
+                await _planetRepository.AddAsync(planet);
                 return result.WithSuccess(planet);
-
-            var planetDto = await _externalApiPlanet.GetAsync(id);
-            if (planetDto is null)
-                return result.WithError(
-                    "Planet not found or External Api unavailable", 
-                    new InvalidOperationException(), 
-                    HttpStatusCode.NotFound
-                );
-
-            var films = await LoadFilms(planetDto.Films);
-            if (films == null)
-                return result.WithError(
-                    "Planet not found or External Api unavailable", 
-                    new InvalidOperationException(), 
-                    HttpStatusCode.NotFound
-                );
-
-            planet = planetDto.ConvertToPlanet(planetId, films);
-            await _planetRepository.AddAsync(planet);
-            return result.WithSuccess(planet);
+            }
+            catch(Exception ex){
+               return result.WithException(ex.ToString());
+            }
         }
 
         private async Task<List<Film>> LoadFilms(List<string> filmUrls)
@@ -119,7 +121,6 @@ namespace Matheusses.StarWars.Domain.Application
             if(!deleted)
                   return result.WithError(
                     "Planet not exist", 
-                    new InvalidOperationException(), 
                     HttpStatusCode.NotFound
                 );
             return result.WithSuccess(deleted);

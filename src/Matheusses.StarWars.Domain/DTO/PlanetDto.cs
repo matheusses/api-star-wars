@@ -12,7 +12,6 @@ namespace Matheusses.StarWars.Domain.DTO
         public String Name { get; init; }
         public String Climate { get; init; }
         public String Terrain { get; init; }
-        public DateTime? Created {get; init;}
         public List<string> Films { get; init; }
 
         public Planet ConvertToPlanet(int id, List<Film> films){

@@ -13,7 +13,6 @@ namespace Matheusses.StarWars.Domain.DTO
         public List<string> Errors { get; private set;}
         public HttpStatusCode HttpStatusCode { get; private set; }
         public string Message { get; private set; }
-        internal Exception Exception { get; private set; }
         public T Data{ get; private set; }
 
         internal Result()
@@ -24,18 +23,16 @@ namespace Matheusses.StarWars.Domain.DTO
         private void AddErrors(
             string mensagem, 
             List<string> errors, 
-            Exception ex, 
             HttpStatusCode statusCode)
         {
             Message = mensagem;
             Log.Error(mensagem);
-            Exception = ex;
-            if (ex != null)
-                Log.Error(ex.ToString());
             HttpStatusCode = statusCode;
             Success = false;
             if (errors != null)
                 Errors.AddRange(errors);
+            else
+                Errors.Add(mensagem);
         }
 
         public Result<T> WithSuccess(T data)
@@ -49,28 +46,26 @@ namespace Matheusses.StarWars.Domain.DTO
         public Result<T>  WithErrors(
             string mensagem,
             List <string> errors, 
-            Exception ex = null,
             HttpStatusCode statusCode = HttpStatusCode.BadRequest
             )
         {
-            AddErrors(mensagem, errors, ex, statusCode);
+            AddErrors(mensagem, errors, statusCode);
             return this;
         }
 
 
         public Result<T> WithError(
             string errorMessage, 
-            Exception ex = null, 
             HttpStatusCode statusCode = HttpStatusCode.BadRequest
         )
         {
-            AddErrors(errorMessage, null, ex, statusCode);            
+            AddErrors(errorMessage, null, statusCode);            
             return this;
         }
 
-        public Result<T>  WithException(string errorMessage, Exception ex = null)
+        public Result<T>  WithException(string errorMessage)
         {
-            AddErrors(errorMessage, new List<string>{errorMessage}, ex, HttpStatusCode.InternalServerError);
+            AddErrors(errorMessage, null, HttpStatusCode.InternalServerError);
             return this;
         }
 

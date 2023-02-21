@@ -7,22 +7,22 @@ using Serilog;
 
 namespace Matheusses.StarWars.Domain.DTO
 {
-    public sealed partial class Result<T> 
+    public sealed record Result<T> 
     {
         public bool Success { get; private set; }
         public List<string> Errors { get; private set;}
         public HttpStatusCode HttpStatusCode { get; private set; }
-        public string Message { get; private set; }
-        public T Data{ get; private set; }
+        public string? Message { get; private set; }
+        public T? Data{ get; private set; }
 
-        internal Result()
+        private Result()
         {
             Errors = new List<string>(1);
         }
 
         private void AddErrors(
             string mensagem, 
-            List<string> errors, 
+            List<string>? errors, 
             HttpStatusCode statusCode)
         {
             Message = mensagem;
@@ -68,10 +68,8 @@ namespace Matheusses.StarWars.Domain.DTO
             AddErrors(errorMessage, null, HttpStatusCode.InternalServerError);
             return this;
         }
+        
+        public static Result<T> Create()  => new Result<T>();
 
-    }
-
-    public sealed partial class ResultFactory<T>{        
-	    public static Result<T> Create()  => new Result<T>();
     }
 }

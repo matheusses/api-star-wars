@@ -6,7 +6,7 @@ using Matheusses.StarWars.Domain.Model;
 
 namespace Matheusses.StarWars.Domain.DTO
 {
-    public class PlanetDto
+    public record PlanetDto
     {
         public int Id {get; init;}
         public String Name { get; init; }

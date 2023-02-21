@@ -32,14 +32,14 @@ namespace Matheusses.StarWars.Domain.Application
 
         public async Task<Result<List<Planet>>> GetAllPlanets()
         {
-            var result = ResultFactory<List<Planet>>.Create();
+            var result = Result<List<Planet>>.Create();
             var planets =  (List<Planet>)await _planetRepository.GetAllAsync();
             return result.WithSuccess(planets);
         }
 
         public async Task<Result<Planet>> GetPlanetById(int id)
         {
-            var result = ResultFactory<Planet>.Create();
+            var result = Result<Planet>.Create();
             var planet =  await _planetRepository.GetByIdAsync(id);
             if(planet == null)
                 return result.WithError(
@@ -52,7 +52,7 @@ namespace Matheusses.StarWars.Domain.Application
 
         public async Task<Result<Planet>> GetPlanetByName(string name)
         {
-            var result = ResultFactory<Planet>.Create();
+            var result = Result<Planet>.Create();
             var planet =  await _planetRepository.GetByNameAsync(name);
             if(planet == null)
                   return result.WithError(
@@ -65,7 +65,7 @@ namespace Matheusses.StarWars.Domain.Application
 
         public async Task<Result<Planet>> LoadPlanetByExternalApi(string id)
         {
-            var result = ResultFactory<Planet>.Create();
+            var result = Result<Planet>.Create();
             try{
 
                 int planetId = 0;
@@ -109,14 +109,15 @@ namespace Matheusses.StarWars.Domain.Application
                 if (filmDto is null)
                     return null;
 
-                films.Add(filmDto.ConverToFilm());
+                Film film = filmDto;
+                films.Add(film);
             }
             return films;
         }
 
         public async Task<Result<bool>> RemovePlanet(int id)
         {
-            var result = ResultFactory<bool>.Create();
+            var result = Result<bool>.Create();
             bool deleted = await _planetRepository.DeleteAsync(id);
             if(!deleted)
                   return result.WithError(

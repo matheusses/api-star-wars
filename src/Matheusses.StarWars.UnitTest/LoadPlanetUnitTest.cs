@@ -42,7 +42,8 @@ public partial class PlanetApplicationUnitTest
         var planetDtoFake = PlanetFaker.GenerateDto();        
         var urlFilm = planetDtoFake.Films.First();
         var filmDtoFake = FilmFaker.GenerateDto();
-        List<Film> filmsFake = new List<Film>{ filmDtoFake.ConverToFilm()};
+        Film film = filmDtoFake;
+        List<Film> filmsFake = new List<Film>{ film };
         var planetFake = planetDtoFake.ConvertToPlanet(planetDtoFake.Id, filmsFake);
 
         _planetRepository.GetByIdAsync(planetDtoFake.Id).ReturnsNull();
